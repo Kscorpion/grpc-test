@@ -1,0 +1,31 @@
+syntax = "proto2";  // 协议为proto2
+
+option go_package = "/test";  // 包名
+
+// 发送请求
+message SendAddress {
+  // 发送的参数字段
+  // 参数类型 参数名 标识号(不可重复)
+  optional string address = 1;  // 要请求的地址
+  optional string method = 2;  // 请求方式
+}
+
+// 返回响应
+message GetResponse {
+  // 接收的参数字段
+  // 参数类型 参数名 标识号
+  optional int32 httpCode = 1;  // http状态码
+  optional string response = 2;  // 返回体
+}
+
+// 定义服务,可定义多个服务,每个服务可多个接口
+service GoSpider {
+  // rpc请求 请求的函数 (发送请求参数) returns (返回响应的参数)
+  rpc GetAddressResponse0 (SendAddress) returns (GetResponse);
+  //rpc请求 客户端流式
+  rpc GetAddressResponse1 (stream SendAddress) returns (GetResponse);
+  //rpc请求 服务端流式
+  rpc GetAddressResponse2 (SendAddress) returns (stream GetResponse);
+  //rpc请求 服务端客户端双流
+  rpc GetAddressResponse3 (stream SendAddress) returns (stream GetResponse);
+}
